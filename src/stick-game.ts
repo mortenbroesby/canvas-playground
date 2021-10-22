@@ -1,13 +1,17 @@
 type GameMode = "pointerdown" | "stickFall" | "wait" | "run" | "gameOver";
 
-export async function main({
+interface StickGameOptions {
+  start: () => void;
+}
+
+export function stickGame({
   canvas,
   context,
 }: {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
-}): Promise<void> {
-  console.log("Main: ", { canvas, context });
+}): StickGameOptions {
+  console.log("Stick game: ", { canvas, context });
 
   const maxStones = 6;
   const size = 40;
@@ -149,21 +153,29 @@ export async function main({
     iterate();
   }
 
-  window.onpointerdown = function () {
-    if (mode === "wait") {
-      mode = "pointerdown";
-    } else if (mode === "gameOver") {
-      mode = "wait";
-      reset();
-    }
-  };
+  function start() {
+    console.log("Game has been started.");
 
-  window.onpointerup = function () {
-    if (mode === "pointerdown") {
-      mode = "stickFall";
-    }
-  };
+    window.onpointerdown = function () {
+      if (mode === "wait") {
+        mode = "pointerdown";
+      } else if (mode === "gameOver") {
+        mode = "wait";
+        reset();
+      }
+    };
 
-  reset();
-  animate();
+    window.onpointerup = function () {
+      if (mode === "pointerdown") {
+        mode = "stickFall";
+      }
+    };
+
+    reset();
+    animate();
+  }
+
+  return {
+    start,
+  };
 }

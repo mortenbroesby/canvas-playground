@@ -1,4 +1,4 @@
-import { main } from "./stick-game";
+import { stickGame } from "./stick-game";
 
 const canvas: HTMLCanvasElement =
   document.querySelector("canvas") || document.createElement("canvas");
@@ -15,7 +15,9 @@ if (!context.canvas.parentElement) {
   document.body.appendChild(context.canvas);
 }
 
-main({
+const game = stickGame({
   canvas,
   context,
 });
+
+game.start();
